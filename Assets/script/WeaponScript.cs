@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class WeaponScript : MonoBehaviour
 {
-
+    Enemy Enemy;
     public bool activated;
-
-    public float rotationSpeed;
+    public int damage;
+    private float rotationSpeed;
 
     void Update()
     {
@@ -23,11 +23,15 @@ public class WeaponScript : MonoBehaviour
     {
         if (collision.gameObject.layer == 11)
         {
-            print(collision.gameObject.name);
+            Debug.Log("the Great Cube is stuck on " + collision.gameObject.name + "!!!");
             GetComponent<Rigidbody>().Sleep();
             GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
             GetComponent<Rigidbody>().isKinematic = true;
             activated = false;
+        }
+        if (collision.gameObject.name == "Enemy(Clone)")
+        {
+            Destroy(collision.gameObject);
         }
 
     }
@@ -41,5 +45,12 @@ public class WeaponScript : MonoBehaviour
                 other.GetComponent<BreakBoxScript>().Break();
             }
         }
+
+        if (other.name == "Enemy(Clone)")
+        {
+            Destroy(other);
+        }
+        Debug.Log(other.name);
+
     }
 }

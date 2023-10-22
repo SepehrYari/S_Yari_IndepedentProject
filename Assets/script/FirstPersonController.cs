@@ -12,26 +12,30 @@ public class FirstPersonController : MonoBehaviour
     public float lookSpeed = 2.0f;
     public float lookXLimit = 45.0f;
     public Rigidbody rb;
-
     CharacterController characterController;
     Vector3 moveDirection = Vector3.zero;
     float rotationX = 0;
-
     public bool canMove = true;
-
+    public bool GameOver = false;
     public bool freeze;
     public bool activeGrapple;
     public bool swinging;
-
     public GameObject Weapon;
+    public AudioClip JumpSound;
+    public AudioClip DeathSound;
+    private AudioSource asPlayer;
+    public Animator animator;
+
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-
+        asPlayer = GetComponent<AudioSource>();
+        animator = GetComponent<Animator>();
         // Lock cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        
     }
 
     void Update()
@@ -47,28 +51,25 @@ public class FirstPersonController : MonoBehaviour
         float movementDirectionY = moveDirection.y;
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
-        if (Input.GetButton("Jump") && canMove && characterController.isGrounded)
+        if (Input.GetButton("Jump") && canMove && characterController.isGrounded && !GameOver)
         {
             moveDirection.y = jumpSpeed;
+            asPlayer.PlayOneShot(JumpSound, 1.0f);
         }
         else
         {
             moveDirection.y = movementDirectionY;
         }
 
-        // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
-        // when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
-        // as an acceleration (ms^-2)
+        
         if (!characterController.isGrounded)
         {
             moveDirection.y -= gravity * Time.deltaTime;
         }
 
-        // Move the controller
         characterController.Move(moveDirection * Time.deltaTime);
 
-        // Player and Camera rotation
-        if (canMove)
+        if (canMove && !GameOver)
         {
             rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
             rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
@@ -77,5 +78,17 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.name == "Enemy(Clone)")
+        {
+            animator.SetTrigger("Death");
+            asPlayer.PlayOneShot(DeathSound, 1.0f);
+            canMove = false;
+            GameOver = true;
+            Debug.Log("GameOver, you lose!");
+        }
+    }
+    
 
 }

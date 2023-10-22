@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Enemy
+  - Breakable
   layers:
   - Default
   - TransparentFX
@@ -11,12 +13,12 @@ TagManager:
   - Ground
   - Water
   - UI
+  - Player
+  - Jump PAD
+  - Enemy
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - Non-interactables
   - 
   - 
   - 
