@@ -37,6 +37,7 @@ public class ThrowController : MonoBehaviour
     [Space]
     [Header("Particles")]
     public ParticleSystem glowParticle;
+    public ParticleSystem ImpactParticle;
     public ParticleSystem catchParticle;
     public ParticleSystem trailParticle;
 
@@ -46,6 +47,7 @@ public class ThrowController : MonoBehaviour
         glowParticle.Play();
         catchParticle.Stop();
         trailParticle.Stop();
+        ImpactParticle.Stop();
         
         input = GetComponent<FirstPersonController>();
         weaponRb = weapon.GetComponent<Rigidbody>();
@@ -65,10 +67,17 @@ public class ThrowController : MonoBehaviour
             catchParticle.Stop();
         }
 
-      
+        if (weaponScript.HitRegistered == true)
+        {
+            ImpactParticle.Play();
+        }
+        else
+        {
+            ImpactParticle.Stop();
+        }
 
 
-        if(Input.GetMouseButtonDown(0) && hasWeapon && input.GameOver == false)
+        if (Input.GetMouseButtonDown(0) && hasWeapon && input.GameOver == false)
         {
             WeaponThrow();
             
@@ -77,8 +86,9 @@ public class ThrowController : MonoBehaviour
 
         if (hasWeapon)
         {
-
+            ImpactParticle.Stop();
         }
+
         else
         {
             if (Input.GetMouseButtonDown(1) && input.GameOver == false)

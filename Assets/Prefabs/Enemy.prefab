@@ -144,6 +144,7 @@ MonoBehaviour:
   attackRange: 16
   playerInSightRange: 0
   playerInAttackRange: 0
+  pointValue: 1
 --- !u!195 &6787161958966337133
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -25,6 +25,7 @@ public class FirstPersonController : MonoBehaviour
     public AudioClip DeathSound;
     private AudioSource asPlayer;
     public Animator animator;
+    SpawnManager gamemanager;
 
 
     void Start()
@@ -35,7 +36,7 @@ public class FirstPersonController : MonoBehaviour
         // Lock cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        
+        gamemanager = GameObject.Find("Game Manager").GetComponent<SpawnManager>();
     }
 
     void Update()
@@ -61,6 +62,11 @@ public class FirstPersonController : MonoBehaviour
             moveDirection.y = movementDirectionY;
         }
 
+        if (GameOver)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
         
         if (!characterController.isGrounded)
         {
@@ -82,6 +88,7 @@ public class FirstPersonController : MonoBehaviour
     {
         if (collision.gameObject.name == "Enemy(Clone)")
         {
+            gamemanager.GameOver();
             animator.SetTrigger("Death");
             asPlayer.PlayOneShot(DeathSound, 1.0f);
             canMove = false;
@@ -89,6 +96,5 @@ public class FirstPersonController : MonoBehaviour
             Debug.Log("GameOver, you lose!");
         }
     }
-    
 
 }

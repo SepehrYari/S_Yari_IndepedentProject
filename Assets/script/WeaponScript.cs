@@ -8,6 +8,13 @@ public class WeaponScript : MonoBehaviour
     public bool activated;
     public int damage;
     private float rotationSpeed;
+    public bool HitRegistered = false;
+    SpawnManager GameManager;
+
+    private void Start()
+    {
+        GameManager = GameObject.Find("Game Manager").GetComponent<SpawnManager>();
+    }
 
     void Update()
     {
@@ -31,7 +38,10 @@ public class WeaponScript : MonoBehaviour
         }
         if (collision.gameObject.name == "Enemy(Clone)")
         {
+            
             Destroy(collision.gameObject);
+            GameManager.UpdateScore(1);
+            HitRegistered = true;
         }
 
     }
@@ -46,9 +56,10 @@ public class WeaponScript : MonoBehaviour
             }
         }
 
-        if (other.name == "Enemy(Clone)")
+        if (other.tag == "Enemy")
         {
-            Destroy(other);
+            GameManager.UpdateScore(1);
+            Enemy.DestroyEnemy();
         }
         Debug.Log(other.name);
 

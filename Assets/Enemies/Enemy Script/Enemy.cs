@@ -31,9 +31,16 @@ public class Enemy : MonoBehaviour
     [SerializeField] public float sightRange, attackRange;
     [SerializeField] bool playerInSightRange, playerInAttackRange;
 
-
+    SpawnManager gameManager;
+    public int pointValue;
 
     public enum BillboardType { LookAtCamera, CameraForward };
+
+    private void Start()
+    {
+        gameManager = GameObject.Find("Game Manager").GetComponent<SpawnManager>();
+    }
+
 
     private void Awake()
     {
@@ -118,6 +125,7 @@ public class Enemy : MonoBehaviour
     public void DestroyEnemy()
     {
         Destroy(gameObject);
+        gameManager.UpdateScore(pointValue);
     }
 
     private void OnDrawGizmosSelected()
